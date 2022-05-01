@@ -1,0 +1,62 @@
+
+<small>
+  <div class="col-md-2 ms-sm-auto col-lg-12 px-md-2">
+  <%= form_with( url: root_path, method: :get) do |form| %>
+    <% Source.all.each do |source|  %>
+      <%= form.label source.name  %>
+      <%= form.check_box source.id, include_hidden: false, id: "filter_#{source.name}_hj", checked:  cookies[:filter_and_order_status].include?(source.id) %>
+    <% end %>
+     <button class="btn btn-outline-primary" type="submit">filter</button>
+      <%= select_tag(:sort_option, options_for_select([["Sort by Date High to Low","DESK"], ["Sort by Date Low to High","ASC"]], params[:option] ), class:"btn btn-outline-primary col-md-11 ms-sm-auto col-lg-3 px-md-2", onchange: "this.form.submit();", selected: cookies[:sort_status] ) %>
+  <% end %>
+  </div>
+
+<div class="row bg-primary">
+  <div class="col-2">
+    <h4> Image </h4>
+  </div>
+   <div class="col-3">
+    <h4> headline </h4>
+  </div>
+  <div class="col-4">
+    <h4> snippet </h4>
+  </div>
+  <div class="col-1">
+    <h4> link </h4>
+  </div>
+  <div class="col-1">
+    <h4> Date </h4>
+  </div>
+  <div class="col-1">
+    <h4> Source </h4>
+  </div>
+  </div>
+  <div class="border-top my-2"></div>
+
+
+  <% @articles.each do |article| %>
+  <div class="row">
+    <div class="col-md-2 border-right" >
+    <%= image_tag article.image, alt: "Picture should be here", width: "180px", height: "80%" %>
+    </div>
+     <div class="col-sm-3 col-md-3 border-left" >
+      <%= article.headline %>
+    </div>
+    <div class="col-md-4 border-right">
+      <%= article.snippet %>
+    </div>
+    <div class="col-md-1 border-right" >
+      <a href="<%= article.link %>" , target="_blank" >link to source</a>
+    </div>
+    <div class="col-md-1 border-right">
+      <%= article.date.strftime('%F') %>
+    </div>
+    <div class="col-md-1 border-right">
+      <%= article.source.name %>
+    </div>
+  </div>
+    <div class="border-top my-2"></div>
+<% end %>
+
+  <%== pagy_bootstrap_nav(@pagy) %>
+</small>
