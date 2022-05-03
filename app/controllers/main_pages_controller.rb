@@ -33,7 +33,7 @@ class MainPagesController < ApplicationController
         s2 = link.css('img._image')[0]["src"]
         s3 = s2
         @arr.push(link.css('p._snippet').text)
-        @article = Article.create(link: link[:href], headline: s, snippet: link.css('p._snippet').text.split('...')[1] ,date: Time.now, source_id: 1, image: s3 )
+        @article = Article.create(link: link[:href], headline: s, snippet: link.css('p._snippet').text.split('...')[1] ,date: Time.now, source_id: Source.where(name: "The_Economist").uniq, image: s3 )
         @article.save
         p @article.errors.full_messages
         p @article
@@ -54,7 +54,7 @@ class MainPagesController < ApplicationController
           image_link = link.css('.css-rq4mmj[src]')
           image_link = image_link.map {|element| element["src"]}.join
           p image_link
-          @article = Article.create(link: parse_link, headline: link.css('p').text, snippet: link.css('h4').text ,date: Time.now, source_id: 4, image: image_link )
+          @article = Article.create(link: parse_link, headline: link.css('p').text, snippet: link.css('h4').text ,date: Time.now, source_id: Source.where(name: "NYT").uniq, image: image_link )
           @article.save
           p '__________________________________________'
         end
@@ -73,7 +73,7 @@ class MainPagesController < ApplicationController
       p link.css('a.summary__f7259c7b77').text
       image_link = link.css('img.thumbnail__55f7ac7947')[0]['src'] unless link.css('img.thumbnail__55f7ac7947').to_s == ""
       image_link = "" if link.css('img.thumbnail__55f7ac7947').to_s == ""
-      @article = Article.create(link: parse_link, headline: link.css('a.headline__96ba1917df').text, snippet: link.css('a.summary__f7259c7b77').text ,date: Time.now, source_id: 3, image: image_link )
+      @article = Article.create(link: parse_link, headline: link.css('a.headline__96ba1917df').text, snippet: link.css('a.summary__f7259c7b77').text ,date: Time.now, source_id: Source.where(name: "The_Economist").uniq, image: image_link )
       @article.save
       p '__________________________________________'
     end
