@@ -74,7 +74,7 @@ class MainPagesController < ApplicationController
       p link.css('a.summary__f7259c7b77').text
       image_link = link.css('img.thumbnail__55f7ac7947')[0]['src'] unless link.css('img.thumbnail__55f7ac7947').to_s == ""
       image_link = "" if link.css('img.thumbnail__55f7ac7947').to_s == ""
-      @article = Article.create(link: parse_link, headline: link.css('a.headline__96ba1917df').text, snippet: link.css('a.summary__f7259c7b77').text ,date: Time.now, source_id: Source.find_by(name: "The_Economist").id, image: image_link )
+      @article = Article.create(link: parse_link, headline: link.css('a.headline__96ba1917df').text, snippet: link.css('a.summary__f7259c7b77').text ,date: Time.now, source_id: Source.find_by(name: "Bloomberg").id, image: image_link )
       @article.save
       p '__________________________________________'
     end
