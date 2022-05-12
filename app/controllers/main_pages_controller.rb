@@ -15,6 +15,13 @@ class MainPagesController < ApplicationController
     @articles = sort @articles
   end
 
+  def reset
+    cookies.delete :date
+    cookies.delete :filter_and_order_status
+    cookies.delete :sort_status
+    redirect_to '/'
+  end
+
 
   def parse
     parse_nytimes if params[:NYT].present?

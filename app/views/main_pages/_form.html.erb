@@ -8,23 +8,25 @@
        <%= form.label source.name, class: "form-check-label"  %>
         </div>
        <% end %>
-        <!--  <button class="btn btn-outline-primary"  type="submit">filter</button>-->
+
       <%= select_tag(:date, options_for_select(Article.date_uniq, selected: cookies[:date] ), class:"btn btn-outline-primary float-end", onchange: "this.form.submit();") %>
       <%= select_tag(:sort_option, options_for_select([["Sort by Date High to Low","DESK"], ["Sort by Date Low to High","ASC"]]), class:"btn btn-outline-primary float-end", onchange: "this.form.submit();", selected: cookies[:sort_status] ) %>
+      <%= link_to 'Reset filters', reset_path, class:"btn btn-outline-primary my-small-btn float-end" %>
    <% end %>
+
   </div>
   <div class="border-top my-2"></div>
 
   <small>
-<div class="row bg-primary">
+<div class="row p-1 mb-1 bg-light text-dark">
   <div class="col-2">
     <h4> Image </h4>
   </div>
    <div class="col-3">
-    <h4> headline </h4>
+    <h4> Headline </h4>
   </div>
   <div class="col-4">
-    <h4> snippet </h4>
+    <h4> Snippet </h4>
   </div>
   <div class="col-1">
     <h4> link </h4>
@@ -40,7 +42,7 @@
 
 
   <% @articles.each do |article| %>
-  <div class="row">
+  <div class="row table-hover">
     <div class="col-md-2 border-right" >
     <%= image_tag article.image, alt: "Picture should be here", width: "180px", height: "80%" %>
     </div>
@@ -65,3 +67,8 @@
 
   <%== pagy_bootstrap_nav(@pagy) %>
 </small>
+
+  .my-small-btn {
+  width:80%;
+  padding:5px;
+  }

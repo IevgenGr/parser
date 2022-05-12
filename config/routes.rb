@@ -11,4 +11,5 @@ Rails.application.routes.draw do
   end
   delete 'delete_all_articles', to: 'articles#delete_all', as: 'delete_all_articles'
   get 'parse', to: 'main_pages#parse', as: 'parse'
+  get 'reset', to: 'main_pages#reset', as: 'reset'
 end
