@@ -1,0 +1,36 @@
+
+<small>
+
+  <div class="row bg-primary">
+    <div class="col-2">
+      <h4> Image </h4>
+    </div>
+    <div class="col-3">
+      <h4> headline </h4>
+    </div>
+    <div class="col-4">
+      <h4> snippet </h4>
+    </div>
+    <div class="col-1">
+      <h4> link </h4>
+    </div>
+    <div class="col-1">
+      <h4> Date </h4>
+    </div>
+    <div class="col-1">
+      <h4> Source </h4>
+    </div>
+  </div>
+  <div class="border-top my-2"></div>
+
+
+  <% articles.each do |article| %>
+      <div class="col-md-1 border-right">
+        <%= article %>
+      </div>
+    </div>
+    <div class="border-top my-2"></div>
+  <% end %>
+</small>
+
+

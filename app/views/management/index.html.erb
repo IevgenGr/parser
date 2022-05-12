@@ -1,0 +1,24 @@
+<div class="container">
+<div class="d-grid gap-2">
+  <%= link_to 'sources', sources_path, class: "btn btn-outline-primary me-2" %>
+  <%= link_to 'parse', parse_path, class: "btn btn-outline-primary me-2" %>
+  <%= button_to 'Delete all from articles',  delete_all_articles_path, method: :delete, data: { confirm:  'Are you sure?' }, class: "btn btn-outline-primary me-2" %>
+
+  <%= form_with(url: parse_path, method: :get) do |form| %>
+    <% Source.all.each do |source|  %>
+      <%= form.label source.name  %>
+      <%= form.check_box source.name, include_hidden: false %>
+    <% end %>
+    <div class="d-grid gap-2">
+      <button class="btn btn-outline-primary me-2" type="submit">parse select</button>
+    </div>
+  <% end %>
+</div>
+</div>
+<%= Article.date_uniq.class %>
+
+<%= '_________________' %>
+
+
+  <%= render 'form', articles: Article.date_uniq %>
+

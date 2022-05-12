@@ -5,9 +5,11 @@ class MainPagesController < ApplicationController
     order_options_save = ['DESK' => 'Sort by Date High to Low', 'ASC' => 'Sort by Date Low to High']
     p parameters = params.permit(params.keys).to_h.map{ |e, i| e.to_i }.select{|e| e > 0}
     cookies[:filter_and_order_status] = parameters
+    cookies[:date] = params[:date]
     p order_options_save
     cookies[:sort_status] = order_options_save[0][params[:sort_option]] if params[:sort_option].present?
     @articles = Article.all
+    @articles = @articles.where("created_at::date = ?", params[:date]) if params[:date].present?
     @articles = @articles.where({ source_id: parameters}) if parameters.size > 0
     @pagy, @articles = pagy(@articles, items: 10)
     @articles = sort @articles
