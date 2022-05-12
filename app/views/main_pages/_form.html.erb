@@ -1,17 +1,21 @@
 
-<small>
+
   <div >
   <%= form_with( url: root_path, method: :get) do |form| %>
-    <% Source.all.each do |source|  %>
-       <%= form.check_box source.id, include_hidden: false, id: "filter_#{source.name}_hj", checked:  cookies[:filter_and_order_status].include?(source.id), onchange: "this.form.submit();" %>
-       <%= form.label source.name  %>
-     <% end %>
-     <!--  <button class="btn btn-outline-primary"  type="submit">filter</button>-->
-      <%= select_tag(:date, options_for_select(Article.date_uniq, selected: cookies[:date] ), class:"btn btn-outline-primary", onchange: "this.form.submit();") %>
-      <%= select_tag(:sort_option, options_for_select([["Sort by Date High to Low","DESK"], ["Sort by Date Low to High","ASC"]]), class:"btn btn-outline-primary float-right", onchange: "this.form.submit();", selected: cookies[:sort_status] ) %>
-  <% end %>
+       <% Source.all.each do |source|  %>
+        <div class="form-check form-check-inline">
+       <%= form.check_box source.id, include_hidden: false, id: "filter_#{source.name}_hj", checked:  cookies[:filter_and_order_status].include?(source.id), onchange: "this.form.submit();", class: "form-check-input" %>
+       <%= form.label source.name, class: "form-check-label"  %>
+        </div>
+       <% end %>
+        <!--  <button class="btn btn-outline-primary"  type="submit">filter</button>-->
+      <%= select_tag(:date, options_for_select(Article.date_uniq, selected: cookies[:date] ), class:"btn btn-outline-primary float-end", onchange: "this.form.submit();") %>
+      <%= select_tag(:sort_option, options_for_select([["Sort by Date High to Low","DESK"], ["Sort by Date Low to High","ASC"]]), class:"btn btn-outline-primary float-end", onchange: "this.form.submit();", selected: cookies[:sort_status] ) %>
+   <% end %>
   </div>
+  <div class="border-top my-2"></div>
 
+  <small>
 <div class="row bg-primary">
   <div class="col-2">
     <h4> Image </h4>
