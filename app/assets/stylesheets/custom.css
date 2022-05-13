@@ -1,4 +1,11 @@
 .my_button {
     max-width: 100%;
     height:33px;
+    margin-right:2px;
+    margin-left:2px;
+}
+
+.my_button_bootstrap {
+    margin-right:2px;
+    margin-left:2px;
 }

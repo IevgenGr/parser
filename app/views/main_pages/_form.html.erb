@@ -9,8 +9,8 @@
         </div>
        <% end %>
 
-      <%= select_tag(:date, options_for_select(Article.date_uniq, selected: cookies[:date] ), class:"btn btn-outline-primary float-end", onchange: "this.form.submit();") %>
-      <%= select_tag(:sort_option, options_for_select([["Sort by Date High to Low","DESK"], ["Sort by Date Low to High","ASC"]]), class:"btn btn-outline-primary float-end", onchange: "this.form.submit();", selected: cookies[:sort_status] ) %>
+      <%= select_tag(:date, options_for_select(Article.date_uniq, selected: cookies[:date] ), class:"btn btn-outline-primary float-end my_button_bootstrap", onchange: "this.form.submit();") %>
+      <%= select_tag(:sort_option, options_for_select([["Sort by Date High to Low","DESK"], ["Sort by Date Low to High","ASC"]]), class:"btn btn-outline-primary float-end my_button_bootstrap", onchange: "this.form.submit();", selected: cookies[:sort_status] ) %>
       <%= link_to 'Reset filters', reset_path, class:"btn btn-outline-primary my_button float-end" %>
    <% end %>
 
