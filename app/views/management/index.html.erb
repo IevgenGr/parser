@@ -6,8 +6,10 @@
 
   <%= form_with(url: parse_path, method: :get) do |form| %>
     <% Source.all.each do |source|  %>
-      <%= form.label source.name  %>
+      <div class="form-check form-check-inline">
       <%= form.check_box source.name, include_hidden: false %>
+      <%= form.label source.name  %>
+      </div>
     <% end %>
     <div class="d-grid gap-2">
       <button class="btn btn-outline-primary me-2" type="submit">parse select</button>
@@ -21,4 +23,14 @@
 
 
   <%= render 'form', articles: Article.date_uniq %>
+
+<h1>Welcome, this is the home page</h1>
+
+<button type="button"
+        class="btn btn-lg btn-danger"
+        data-bs-toggle="popover"
+        title="Popover title"
+        data-bs-content="Amazing content, right ?">
+  Click to toggle popover
+</button>
 
