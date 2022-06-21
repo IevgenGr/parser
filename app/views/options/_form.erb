@@ -1,0 +1,24 @@
+<%= form_with(model: option) do |form| %>
+  <% if option.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(option.errors.count, "error") %> prohibited this option from being saved:</h2>
+      <ul>
+        <% option.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="row">
+    <%= form.label :agent %>
+    <div class="col-md-4">
+      <%= form.select( :agent, options_for_select(Option.agents.map{ |key, value| [key.capitalize, key]}, option.agent),{}, { :class => 'btn btn-outline-primary btn-sm' }) %>
+    </div>
+
+  </div>
+
+   <div class="actions">
+    <%= form.submit class: "btn btn-outline-primary btn-sm" %>
+  </div>
+<% end %>

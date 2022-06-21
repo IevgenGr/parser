@@ -1,21 +1,25 @@
+# frozen_string_literal: true
 class MainPagesController < ApplicationController
+
   def index
-    order_options_save = ['DESK' => 'Sort by Date High to Low', 'ASC' => 'Sort by Date Low to High']
-    parameters = params.permit(params.keys).to_h.map { |e, _i| e.to_i }.select { |e| e > 0 }
-    cookies[:filter_and_order_status] = parameters
-    cookies[:date] = params[:date]
-    cookies[:sort_status] = order_options_save[0][params[:sort_option]] if params[:sort_option].present?
+    parameters = params.permit(params.keys).to_h.map { |e, _i| e.to_i }.select(&:positive?)
+    cookies[:filter_sources] = parameters
     @articles = Article.all
     @articles = @articles.where('created_at::date = ?', params[:date]) if params[:date].present?
-    @articles = @articles.where({ source_id: parameters }) if parameters.size > 0
+    @articles = @articles.where({ source_id: parameters }) if parameters.size.positive?
     @pagy, @articles = pagy(@articles, items: 10)
     @articles = sort @articles
+    respond_to do |format|
+      format.js
+      format.html
+    end
+  end
+
+  def test_form
+    @articles = Article.all
   end
 
   def reset
-    cookies.delete :date
-    cookies.delete :filter_and_order_status
-    cookies.delete :sort_status
     redirect_to '/'
   end
 
@@ -28,28 +32,23 @@ class MainPagesController < ApplicationController
   end
 
   def parse_economist
-    agent = Mechanize.new
-    agent.user_agent_alias = 'Linux Mozilla'
-    page = agent.get('https://www.economist.com/search?q=ukraine&sort=date')
-    @articles = Article.all
-    @arr = []
+    init_mechanize
+    page = @agent.get('https://www.economist.com/search?q=ukraine&sort=date')
     page.css('a._search-result').each do |link|
-      s = (link.css('span._headline').text).split('|')[0]
-      s2 = link.css('img._image')[0]['src']
-      s3 = s2
-      @article = Article.create(link: link[:href], headline: s, snippet: link.css('p._snippet').text.split('...')[1],
-                                date: Time.now, source_id: Source.find_by(name: 'The_Economist').id, image: s3)
-      @article.save
-    end
+     s = (link.css('span._headline').text).split('|')[0]
+     s2 = link.css('img._image')[0]['src']
+     s3 = s2
+     @article = Article.create(link: link[:href], headline: s, snippet: link.css('p._snippet').text.split('...')[1],
+                               date: Time.now, source_id: Source.find_by(name: 'The_Economist').id, image: s3)
+     @article.save
+   end
   end
 
   def parse_nytimes
-    agent = Mechanize.new
-    agent.user_agent_alias = 'Linux Mozilla'
-    page = agent.get('https://www.nytimes.com/search?dropmab=false&query=ukraine&sort=newest')
-    @articles = Article.all
+    init_mechanize
+    page = @agent.get('https://www.nytimes.com/search?dropmab=false&query=ukraine&sort=newest')
     page.css('div.css-1kl114x').each do |link|
-      p parse_link = 'https://www.nytimes.com' + link.css('.css-e1lvw9 a')[0]['href']
+      p parse_link = "https://www.nytimes.com#{link.css('.css-e1lvw9 a')[0]['href']}"
       image_link = link.css('.css-rq4mmj[src]')
       image_link = image_link.map { |element| element['src'] }.join
       @article = Article.create(link: parse_link, headline: link.css('p').text, snippet: link.css('h4').text,
@@ -59,11 +58,8 @@ class MainPagesController < ApplicationController
   end
 
   def parse_bloomberg
-    agent = Mechanize.new
-    agent.user_agent_alias = 'Linux Mozilla'
-    page = agent.get('https://www.bloomberg.com/search?query=Ukraine#')
-    @articles = Article.all
-    @arr = []
+    init_mechanize
+    page = @agent.get('https://www.bloomberg.com/search?query=Ukraine#')
     page.css('.storyItem__4d5aa17d67').each do |link|
       p '777'
       p link.css('a.headline__96ba1917df').text
@@ -74,19 +70,16 @@ class MainPagesController < ApplicationController
       end
       image_link = '' if link.css('img.thumbnail__55f7ac7947').to_s == ''
       @article = Article.create(link: parse_link, headline: link.css('a.headline__96ba1917df').text,
-                                snippet: link.css('a.summary__f7259c7b77').text, date: Time.now, source_id: Source.find_by(name: 'Bloomberg').id, image: image_link)
+                                snippet: link.css('a.summary__f7259c7b77').text, date: Time.now,
+                                source_id: Source.find_by(name: 'Bloomberg').id, image: image_link)
       @article.save
       p '__________________________________________'
     end
   end
 
   def parse_wsj
-    agent = Mechanize.new
-    agent.user_agent_alias = 'Linux Mozilla'
-    page = agent.get('https://www.wsj.com/search?query=Ukraine')
-    @articles = Article.all
-    @arr = []
-    p '2'
+    init_mechanize
+    page = @agent.get('https://www.wsj.com/search?query=Ukraine')
     page.search('div.WSJTheme--search-result--2NFlrTX7').each do |link|
       p '777'
       p link.search('span.WSJTheme--headlineText--He1ANr9C').text
@@ -116,4 +109,9 @@ class MainPagesController < ApplicationController
       articles.order(created_at: :desc)
     end
   end
+end
+
+def init_mechanize
+  @agent = Mechanize.new
+  @agent.user_agent_alias = Option.first.agent
 end

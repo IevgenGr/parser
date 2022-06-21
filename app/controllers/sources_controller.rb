@@ -6,11 +6,9 @@ class SourcesController < ApplicationController
     @source = Source.new
   end
 
-  def new
-    @source = Source.new
-  end
+  def new; end
 
-  def edit;  end
+  def edit; end
 
   def create
     @source = Source.create(source_params)
@@ -27,7 +25,7 @@ class SourcesController < ApplicationController
   def update
     respond_to do |format|
       if @source.update(source_params)
-        format.html { redirect_to sources_path, notice: "Source was successfully updated." }
+        format.html { redirect_to sources_path, notice: 'Source was successfully updated.' }
         format.json { render :index, status: :ok, location: @source }
       else
         format.html { render :edit, status: :unprocessable_entity }

@@ -15,12 +15,8 @@ class ArticlesController < ApplicationController
   end
 
   def delete_all
-    Article.all.each do |article|
-      article.destroy
-    end
+    Article.all.each(&:destroy)
     redirect_to root_path
   end
-
-
 
 end

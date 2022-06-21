@@ -1,0 +1,13 @@
+<div >
+  <%= form_with(url: root_path, method: :get, remote: true)  do |form| %>
+    <% Source.all.each do |source|  %>
+      <div class="form-check form-check-inline">
+        <%= form.check_box source.id, include_hidden: false, id: "filter_#{source.name}_hj", checked:  cookies[:filter_sources].include?(source.id), onchange: "this.form.submit();", class: "form-check-input" %>
+        <%= form.label source.name, class: "form-check-label"  %>
+      </div>
+    <% end %>
+    <%= select_tag(:date, options_for_select(Article.date_uniq, params[:date]), prompt: "All", class: "btn btn-outline-primary float-end my_button_bootstrap btn-sm", onchange: "this.form.submit();") %>
+    <%= select_tag(:sort_option, options_for_select([["Sort by Date High to Low","DESK"], ["Sort by Date Low to High","ASC"]], params[:sort_option]), class:"btn btn-outline-primary float-end my_button_bootstrap btn-sm", onchange: "this.form.submit();") %>
+    <%= link_to 'Reset filters', reset_path, class:"btn btn-outline-primary my_button float-end btn-sm" %>
+  <% end %>
+</div>
