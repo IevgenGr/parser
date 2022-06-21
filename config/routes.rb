@@ -2,9 +2,9 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
-   root 'main_pages#index', as: 'root'
+  root 'main_pages#index', as: 'root'
   resources :management
-  #
+  resources :options
   resources :main_pages
   resources :sources do
     resources :articles

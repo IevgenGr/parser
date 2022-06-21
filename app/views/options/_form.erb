@@ -13,7 +13,7 @@
   <div class="row">
     <%= form.label :agent %>
     <div class="col-md-4">
-      <%= form.select( :agent, options_for_select(Option.agents.map{ |key, value| [key.capitalize, key]}, option.agent),{}, { :class => 'btn btn-outline-primary btn-sm' }) %>
+      <%= form.select( :agent, options_for_select(Option.agents.map{ |key, value| [key.capitalize, value]}, option.agent),{}, { :class => 'btn btn-outline-primary btn-sm' }) %>
     </div>
 
   </div>
